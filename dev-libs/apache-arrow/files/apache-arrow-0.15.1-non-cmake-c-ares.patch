@@ -1,0 +1,11 @@
+--- a/cmake_modules/ThirdpartyToolchain.cmake	2020-01-20 22:16:45.026687705 -0800
++++ b/cmake_modules/ThirdpartyToolchain.cmake	2020-01-20 22:17:26.032504265 -0800
+@@ -2169,7 +2169,7 @@
+   elseif(c-ares_SOURCE STREQUAL "BUNDLED")
+     build_cares()
+   elseif(c-ares_SOURCE STREQUAL "SYSTEM")
+-    find_package(c-ares REQUIRED CONFIG)
++    find_package(c-aresAlt REQUIRED)
+   endif()
+ 
+   # TODO: Don't use global includes but rather target_include_directories
