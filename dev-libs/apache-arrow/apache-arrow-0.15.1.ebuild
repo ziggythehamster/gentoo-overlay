@@ -12,7 +12,7 @@ HOMEPAGE="https://arrow.apache.org/"
 IUSE="brotli bz2 lz4 snappy test zlib zstd"
 KEYWORDS="~amd64"
 LICENSE="Apache-2.0"
-SLOT="0/${PV%%.*}"
+SLOT="0/${PV}"
 
 SRC_URI="
 	mirror://apache/arrow/arrow-${PV}/apache-arrow-${PV}.tar.gz -> ${P}.tar.gz
