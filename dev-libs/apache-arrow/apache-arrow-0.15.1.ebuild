@@ -41,7 +41,7 @@ RDEPEND="
 	>=dev-libs/thrift-0.12.0
 	>=dev-libs/uriparser-0.9.1
 	>=dev-python/numpy-1.14.5
-	>=net-dns/c-ares-1.15.0-r1
+	>=net-dns/c-ares-1.15.0
 	>=net-libs/grpc-1.25.0
 	dev-libs/openssl:0/1.1
 "
