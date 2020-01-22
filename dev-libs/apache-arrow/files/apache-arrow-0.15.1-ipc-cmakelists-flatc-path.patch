@@ -1,0 +1,14 @@
+--- a/src/arrow/ipc/CMakeLists.txt	2020-01-20 22:47:34.905202840 -0800
++++ b/src/arrow/ipc/CMakeLists.txt	2020-01-20 22:52:13.244017893 -0800
+@@ -60,10 +60,7 @@
+   list(APPEND ABS_FBS_SRC ${ABS_FIL})
+ endforeach()
+ 
+-get_target_property(FLATC_EXECUTABLE flatbuffers::flatc IMPORTED_LOCATION)
+-if(NOT FLATC_EXECUTABLE)
+-  get_target_property(FLATC_EXECUTABLE flatbuffers::flatc IMPORTED_LOCATION_RELEASE)
+-endif()
++set(FLATC_EXECUTABLE "/usr/bin/flatc")
+ message(STATUS "flatc: ${FLATC_EXECUTABLE}")
+ add_custom_command(OUTPUT ${FBS_OUTPUT_FILES}
+                    COMMAND ${FLATC_EXECUTABLE}
