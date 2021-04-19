@@ -1,2 +1,6 @@
-*.ebuild text eol=lf
-*.patch text eol=lf
+Manifest        text eol=lf
+.editorconfig   text eol=lf
+.gitattributes  text eol=lf
+.gitignore      text eol=lf
+*.ebuild        text eol=lf
+*.patch         text eol=lf
