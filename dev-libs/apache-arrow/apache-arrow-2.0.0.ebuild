@@ -23,9 +23,9 @@ SRC_URI="
 	mirror://apache/arrow/arrow-${PV}/apache-arrow-${PV}.tar.gz -> ${P}.tar.gz
 	https://github.com/Tencent/rapidjson/archive/${RAPIDJSON_GIT_COMMIT}.tar.gz -> ${P}-vendored-rapidjson.tar.gz
 
-  jemalloc? (
-    https://github.com/jemalloc/jemalloc/releases/download/${JEMALLOC_VERSION}/jemalloc-${JEMALLOC_VERSION}.tar.bz2 -> ${P}-vendored-jemalloc.tar.bz2
-  )
+	jemalloc? (
+		https://github.com/jemalloc/jemalloc/releases/download/${JEMALLOC_VERSION}/jemalloc-${JEMALLOC_VERSION}.tar.bz2 -> ${P}-vendored-jemalloc.tar.bz2
+	)
 	test? (
 		https://github.com/apache/arrow-testing/archive/860376d4e586a3ac34ec93089889da624ead6c2a.tar.gz -> ${P}-testing.tar.gz
 		https://github.com/apache/parquet-testing/archive/d914f9d289488c7db1759d7a88a4a1b8f062c7dd.tar.gz -> ${P}-parquet-testing.tar.gz
@@ -36,11 +36,11 @@ S="${WORKDIR}/${P}/cpp"
 
 # CMake 3.18 had some problems handling their complicated CMake config
 BDEPEND="
-  ${PYTHON_DEPS}
+	${PYTHON_DEPS}
 	>=dev-util/cmake-3.20.0
-  test? (
-    >=dev-cpp/gtest-1.10.0
-  )
+	test? (
+		>=dev-cpp/gtest-1.10.0
+	)
 "
 
 RDEPEND="
@@ -62,37 +62,37 @@ RDEPEND="
 	dev-libs/openssl:0/1.1
 	>=dev-libs/libutf8proc-2.5.0
 
-  $(python_gen_cond_dep '
-    dev-python/numpy[${PYTHON_USEDEP}]
-  ')
+	$(python_gen_cond_dep '
+		dev-python/numpy[${PYTHON_USEDEP}]
+	')
 "
 
 BDEPEND="virtual/pkgconfig"
 
 PATCHES=(
-  "${FILESDIR}/${P}-cmake-policy.patch" # Silence CMake policy warnings
+	"${FILESDIR}/${P}-cmake-policy.patch" # Silence CMake policy warnings
 	"${FILESDIR}/${P}-find-c-ares.patch" # Install Findc-ares.cmake so we can detect our non-CMake built c-ares
 	"${FILESDIR}/${P}-non-cmake-c-ares.patch" # Find c-ares using the above Findc-ares.cmake
 	"${FILESDIR}/${P}-fix-grpc.patch" # CMake has issues locating gRPC
 )
 
 pkg_setup() {
-  python-single-r1_pkg_setup
+	python-single-r1_pkg_setup
 }
 
 # Since upstream does not include the test data in their source distribution, unpack it if needed
 src_unpack() {
 	unpack "${P}.tar.gz" || die
 
-  ebegin "Adding vendored RapidJSON to build system"
-  cp "${DISTDIR}/${P}-vendored-rapidjson.tar.gz" "${S}/thirdparty/rapidjson-${RAPIDJSON_GIT_COMMIT}.tar.gz" || die
-  eend
+	ebegin "Adding vendored RapidJSON to build system"
+	cp "${DISTDIR}/${P}-vendored-rapidjson.tar.gz" "${S}/thirdparty/rapidjson-${RAPIDJSON_GIT_COMMIT}.tar.gz" || die
+	eend
 
-  if use jemalloc; then
-    ebegin "Adding vendored jemalloc to build system"
-    cp "${DISTDIR}/${P}-vendored-jemalloc.tar.bz2" "${S}/thirdparty/jemalloc-${JEMALLOC_VERSION}.tar.bz2" || die
-    eend
-  fi
+	if use jemalloc; then
+		ebegin "Adding vendored jemalloc to build system"
+		cp "${DISTDIR}/${P}-vendored-jemalloc.tar.bz2" "${S}/thirdparty/jemalloc-${JEMALLOC_VERSION}.tar.bz2" || die
+		eend
+	fi
 
 	if use test; then
 		ebegin "Unpacking Arrow test data"
@@ -108,23 +108,23 @@ src_unpack() {
 multilib_src_configure() {
 	export ARROW_RAPIDJSON_URL="${S}/thirdparty/rapidjson-${RAPIDJSON_GIT_COMMIT}.tar.gz"
 
-  if use jemalloc; then
-    export ARROW_JEMALLOC_URL="${S}/thirdparty/jemalloc-${JEMALLOC_VERSION}.tar.bz2"
-  fi
+	if use jemalloc; then
+		export ARROW_JEMALLOC_URL="${S}/thirdparty/jemalloc-${JEMALLOC_VERSION}.tar.bz2"
+	fi
 
-  # Determine the SIMD level to compile and use
-  if use cpu_flags_x86_avx512f; then
-    local simd_level=AVX512
-  elif use cpu_flags_x86_avx2; then
-    local simd_level=AVX2
-  elif use cpu_flags_x86_sse4_2; then
-    local simd_level=SSE4_2
-  else
-    local simd_level=NONE
-  fi
+	# Determine the SIMD level to compile and use
+	if use cpu_flags_x86_avx512f; then
+		local simd_level=AVX512
+	elif use cpu_flags_x86_avx2; then
+		local simd_level=AVX2
+	elif use cpu_flags_x86_sse4_2; then
+		local simd_level=SSE4_2
+	else
+		local simd_level=NONE
+	fi
 
 	local mycmakeargs=(
-    -DARROW_ALTIVEC=OFF # TODO: handle PPC and PPC CPU_FLAGS
+		-DARROW_ALTIVEC=OFF # TODO: handle PPC and PPC CPU_FLAGS
 		-DARROW_BUILD_TESTS=$(usex 'test')
 		-DARROW_BUILD_UTILITIES=ON
 		-DARROW_COMPUTE=ON
@@ -138,10 +138,10 @@ multilib_src_configure() {
 		-DARROW_GANDIVA_JAVA=OFF # FIXME: Add use and dependencies
 		-DARROW_HDFS=ON # This always uses a bundled hdfs.h
 		-DARROW_HIVESERVER2=OFF # Currently does not work due to improper Arrow API use
-    -DARROW_INSTALL_NAME_RPATH=OFF # Required to prevent building a library which apache-arrow-glib can't use
+		-DARROW_INSTALL_NAME_RPATH=OFF # Required to prevent building a library which apache-arrow-glib can't use
 		-DARROW_IPC=ON
 		-DARROW_JEMALLOC=$(usex 'jemalloc')
-    -DARROW_JNI=OFF # FIXME: Add use and dependencies
+		-DARROW_JNI=OFF # FIXME: Add use and dependencies
 		-DARROW_JSON=ON
 		-DARROW_MIMALLOC=OFF # This is for Windows
 		-DARROW_ORC=OFF # FIXME: Add use and dependencies
@@ -151,10 +151,10 @@ multilib_src_configure() {
 		-DARROW_PROTOBUF_USE_SHARED=ON
 		-DARROW_PYTHON=ON
 		-DARROW_RE2_LINKAGE=shared
-    -DARROW_RUNTIME_SIMD_LEVEL=${simd_level}
+		-DARROW_RUNTIME_SIMD_LEVEL=${simd_level}
 		-DARROW_S3=OFF # FIXME: Add use and dependencies
-    -DARROW_SIMD_LEVEL=${simd_level}
-    -DARROW_TENSORFLOW=$(usex 'tensorflow')
+		-DARROW_SIMD_LEVEL=${simd_level}
+		-DARROW_TENSORFLOW=$(usex 'tensorflow')
 		-DARROW_USE_GLOG=ON
 		-DARROW_WITH_BROTLI=$(usex 'brotli')
 		-DARROW_WITH_BZ2=$(usex 'bz2')
@@ -165,7 +165,7 @@ multilib_src_configure() {
 		-DARROW_WITH_SNAPPY=$(usex 'snappy')
 		-DARROW_WITH_ZLIB=$(usex 'zlib')
 		-DARROW_WITH_ZSTD=$(usex 'zstd')
-    -DPARQUET_BUILD_EXECUTABLES=ON
+		-DPARQUET_BUILD_EXECUTABLES=ON
 		-DRapidJSON_SOURCE=BUNDLED # a pre-release version is required due to https://github.com/Tencent/rapidjson/pull/1323
 	)
 
@@ -184,19 +184,19 @@ multilib_src_test() {
 }
 
 multilib_src_install() {
-  cmake-utils_src_install
+	cmake-utils_src_install
 
-  cd "${S}"
+	cd "${S}"
 
-  dodoc CHANGELOG_PARQUET.md
+	dodoc CHANGELOG_PARQUET.md
 
-  cd ..
+	cd ..
 
-  dodoc CHANGELOG.md CODE_OF_CONDUCT.md CONTRIBUTING.md LICENSE.txt NOTICE.txt README.md
+	dodoc CHANGELOG.md CODE_OF_CONDUCT.md CONTRIBUTING.md LICENSE.txt NOTICE.txt README.md
 
-  # Remove /usr/share/doc/arrow they helpfully created
-  rm -rf "${D}/usr/share/doc/arrow"
+	# Remove /usr/share/doc/arrow they helpfully created
+	rm -rf "${D}/usr/share/doc/arrow"
 
-  # Don't install the testing stuff since they're only used by src_test
-  find "${D}" -name '*_testing.*' -delete -o -name '*ArrowTesting*' -delete
+	# Don't install the testing stuff since they're only used by src_test
+	find "${D}" -name '*_testing.*' -delete -o -name '*ArrowTesting*' -delete
 }

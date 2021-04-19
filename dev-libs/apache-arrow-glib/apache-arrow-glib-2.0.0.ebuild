@@ -16,30 +16,30 @@ SRC_URI="mirror://apache/arrow/arrow-${PV}/apache-arrow-${PV}.tar.gz -> apache-a
 S="${WORKDIR}/apache-arrow-${PV}/c_glib"
 
 RDEPEND="
-    >=dev-libs/glib-2.60.7
-    >=dev-libs/gobject-introspection-1.60.2
-    dev-libs/apache-arrow:${SLOT}
+	>=dev-libs/glib-2.60.7
+	>=dev-libs/gobject-introspection-1.60.2
+	dev-libs/apache-arrow:${SLOT}
 "
 
 BDEPEND="
-    doc? ( >=dev-util/gtk-doc-1.25-r1 )
-    >=dev-util/meson-0.52.1
-    virtual/pkgconfig
+	doc? ( >=dev-util/gtk-doc-1.25-r1 )
+	>=dev-util/meson-0.52.1
+	virtual/pkgconfig
 "
 
 src_configure() {
-    econf $(use_enable doc gtk-doc)
+	econf $(use_enable doc gtk-doc)
 }
 
 src_install() {
-    emake DESTDIR="${D}" install
+	emake DESTDIR="${D}" install
 
-    if [[ $(declare -p DOCS) == "declare -a "* ]] ; then
-        dodoc "${DOCS[@]}"
-    else
-        dodoc ${DOCS}
-    fi
+	if [[ $(declare -p DOCS) == "declare -a "* ]] ; then
+			dodoc "${DOCS[@]}"
+	else
+			dodoc ${DOCS}
+	fi
 
-    # delete /usr/share/doc/arrow-glib they helpfully made for us
-    rm -rf "${D}/usr/share/doc/arrow-glib"
+	# delete /usr/share/doc/arrow-glib they helpfully made for us
+	rm -rf "${D}/usr/share/doc/arrow-glib"
 }
