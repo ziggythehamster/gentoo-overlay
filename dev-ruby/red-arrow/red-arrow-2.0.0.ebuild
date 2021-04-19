@@ -14,7 +14,8 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
-ruby_add_rdepend "=dev-libs/apache-arrow-glib-${PV}*"
+RDEPEND+=" =dev-libs/apache-arrow-glib-${PV}*"
+
 ruby_add_rdepend ">=dev-ruby/bigdecimal-2.0.3"
 ruby_add_rdepend ">=dev-ruby/extpp-0.0.7"
 ruby_add_rdepend ">=dev-ruby/ruby-gio2-3.3.6"
