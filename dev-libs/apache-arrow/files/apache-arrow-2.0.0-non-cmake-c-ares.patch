@@ -1,0 +1,10 @@
+--- a/cmake_modules/ThirdpartyToolchain.cmake        2021-04-18 14:14:18.232885822 -0700
++++ b/cmake_modules/ThirdpartyToolchain.cmake     2021-04-18 14:18:33.615635339 -0700
+@@ -2264,7 +2264,7 @@
+   elseif(c-ares_SOURCE STREQUAL "BUNDLED")
+     build_cares()
+   elseif(c-ares_SOURCE STREQUAL "SYSTEM")
+-    find_package(c-ares REQUIRED CONFIG)
++    resolve_dependency(c-ares)
+     set(CARES_INCLUDE_DIR ${c-ares_INCLUDE_DIR})
+   endif()

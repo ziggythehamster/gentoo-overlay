@@ -1,0 +1,22 @@
+--- a/cmake_modules/ThirdpartyToolchain.cmake      2021-04-18 15:18:06.253449628 -0700
++++ b/cmake_modules/ThirdpartyToolchain.cmake   2021-04-18 15:18:58.463142599 -0700
+@@ -2522,17 +2522,10 @@
+   elseif(gRPC_SOURCE STREQUAL "BUNDLED")
+     build_grpc()
+   elseif(gRPC_SOURCE STREQUAL "SYSTEM")
+-    find_package(gRPC ${ARROW_GRPC_REQUIRED_VERSION} QUIET)
+-    if(NOT gRPC_FOUND)
+-      # Ubuntu doesn't package the CMake config
+-      find_package(gRPCAlt ${ARROW_GRPC_REQUIRED_VERSION} REQUIRED)
+-    endif()
++    find_package(gRPCAlt ${ARROW_GRPC_REQUIRED_VERSION} REQUIRED)
+   endif()
+
+-  get_target_property(GRPC_CPP_PLUGIN gRPC::grpc_cpp_plugin IMPORTED_LOCATION)
+-  if(NOT GRPC_CPP_PLUGIN)
+-    get_target_property(GRPC_CPP_PLUGIN gRPC::grpc_cpp_plugin IMPORTED_LOCATION_RELEASE)
+-  endif()
++  set(GRPC_CPP_PLUGIN "/usr/bin/grpc_cpp_plugin")
+
+   if(TARGET gRPC::address_sorting)
+     set(GRPC_HAS_ADDRESS_SORTING TRUE)

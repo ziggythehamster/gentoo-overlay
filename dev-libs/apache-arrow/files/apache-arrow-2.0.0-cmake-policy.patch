@@ -1,0 +1,13 @@
+--- a/CMakeLists.txt 2021-04-18 15:38:42.419744733 -0700
++++ b/CMakeLists.txt      2021-04-18 15:39:41.849568281 -0700
+@@ -54,6 +54,10 @@
+   cmake_policy(SET CMP0063 NEW)
+ endif()
+
++if(POLICY CMP0115)
++  cmake_policy(SET CMP0115 OLD)
++endif()
++
+ set(ARROW_VERSION "2.0.0")
+
+ string(REGEX MATCH "^[0-9]+\\.[0-9]+\\.[0-9]+" ARROW_BASE_VERSION "${ARROW_VERSION}")
